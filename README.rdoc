@@ -43,5 +43,4 @@ You are not limited to IP adresses. You may blocking the object itself using oth
 
 == Copyright
 
-(c) 2010 netsense LLC - managed security audits - http://netsense.ch/
-twitter: http://twitter.com/netsense_ltd
+(c) 2010 netsense LLC - managed security audits - http://netsense.ch
