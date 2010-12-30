@@ -47,8 +47,6 @@ module Intrusion
        end
       return false
     end
-    
-    protected
 
     # convert yaml string helper
     def ids_load
