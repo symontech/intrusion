@@ -1,5 +1,43 @@
 = Intrusion
 
-Intrusion detection for rails apps
+Intrusion is a module to help you detect and prevent intrusion attempts for your rails application.
+
+== Preparation
+create a 'ids' attribute for the ActiveRecord model you want to protect and migrate, e.g:
+
+  rails generate migration add_ids_to_accounts ids:string
+  rake db:migrate
+
+  class Account < ActiveRecord::Base
+    include Intrusion
+  end
+
+== Examples:
+=== Check if ip is blocked
+
+  return "your ip is blocked" if Account.find(1).is_blocked?(request.remote_addr)
 
 
+=== Report suspicious activity
+The internal counter will be increased. If you do this 10 times, blocking is active
+
+  Account.find(1).ids_report!(request.remote_addr)
+
+=== Instantly block ip
+  Account.find(1).ids_report!(request.remote_addr, true)
+
+=== Reset
+  Account.find(1).ids_unblock!(request.remote_addr)
+
+
+=== Blocking objects with keywords
+
+You can use blocking on the object itself using keywords, (e.g. failed login attempts for user)
+  Account.find(1).ids_report!('self')
+
+
+== Copyright
+
+(c) 2010 netsense LLC
+managed security audits
+http://netsense.ch/
