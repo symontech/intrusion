@@ -1,6 +1,6 @@
 = Intrusion
 
-Intrusion is a module to help you detect and prevent intrusion attempts for your rails application.
+Intrusion is a gem helping you to detect and prevent intrusion attempts within your ruby on rails application.
 
 == Preparation
 include intrusion in your Gemfile (Rails 3)
