@@ -18,8 +18,8 @@ include Intrusion in your model:
   end
 
 == Examples:
-=== Check if ip is blocked
 
+=== Check if IP adress is blocked
   return "your ip is blocked" if Account.find(1).is_blocked?(request.remote_addr)
 
 
@@ -37,7 +37,7 @@ This resets the counter to 0:
 
 
 === Blocking objects with keywords
-You are not limited to IP adresses. You may blocking the object itself using other keywords:
+You are not limited to IP adresses. You may block the object itself using any keyword:
   Account.find(1).ids_report!('self')
 
 
