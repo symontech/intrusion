@@ -1,7 +1,5 @@
-=begin
 = Intrusion
 
 Intrusion detection for rails apps
 
 
-=end
