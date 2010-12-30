@@ -26,7 +26,7 @@ include Intrusion in your model:
 == Examples:
 
 === Check if IP adress is blocked
-  return "your ip is blocked" if Account.find(1).is_blocked?(request.remote_addr)
+  return "your ip is blocked" if Account.find(1).ids_is_blocked?(request.remote_addr)
 
 
 === Report suspicious activity
