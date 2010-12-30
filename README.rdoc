@@ -3,10 +3,15 @@
 Intrusion is a module to help you detect and prevent intrusion attempts for your rails application.
 
 == Preparation
+include intrusion in your Gemfile (Rails 3)
+  gem 'intrusion'
+
 create a 'ids' attribute for the ActiveRecord model you want to protect and migrate, e.g:
 
-  rails generate migration add_ids_to_accounts ids:string
-  rake db:migrate
+  # rails generate migration add_ids_to_accounts ids:string
+  # rake db:migrate
+
+include Intrusion in your model:
 
   class Account < ActiveRecord::Base
     include Intrusion
@@ -19,7 +24,7 @@ create a 'ids' attribute for the ActiveRecord model you want to protect and migr
 
 
 === Report suspicious activity
-The internal counter will be increased. If you do this 10 times, blocking is active
+The internal counter will be increased. If you do this 10 times, blocking will be enabled
 
   Account.find(1).ids_report!(request.remote_addr)
 
@@ -27,17 +32,16 @@ The internal counter will be increased. If you do this 10 times, blocking is act
   Account.find(1).ids_report!(request.remote_addr, true)
 
 === Reset
+This resets the counter to 0:
   Account.find(1).ids_unblock!(request.remote_addr)
 
 
 === Blocking objects with keywords
-
-You can use blocking on the object itself using keywords, (e.g. failed login attempts for user)
+You are not limited to IP adresses. You may blocking the object itself using other keywords:
   Account.find(1).ids_report!('self')
 
 
 == Copyright
 
-(c) 2010 netsense LLC
-managed security audits
-http://netsense.ch/
+(c) 2010 netsense LLC - managed security audits - http://netsense.ch/
+twitter: http://twitter.com/netsense_ltd
