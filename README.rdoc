@@ -48,7 +48,7 @@ You are not limited to IP adresses. You may block the object itself using any ke
 
 
 == Hint
-Try http://spectify.com/ to scan your servers and applications for vulnerabilities - for free!
+Try http://spectify.com to scan your servers and applications for vulnerabilities - for free!
 
 == Copyright
 
