@@ -2,10 +2,16 @@
 
 Intrusion is a gem helping you to detect and prevent intrusion attempts within your ruby on rails application.
 
-== Preparation
-include intrusion in your Gemfile (Rails 3)
+== Installation
+Install the gem:
+  gem install intrusion
+
+Rails 3: include intrusion in your Gemfile
   gem 'intrusion'
 
+Rails 2: include the gem in config/environment.rb
+  config.gem "intrusion" 
+  
 create a 'ids' attribute for the ActiveRecord model you want to protect and migrate, e.g:
 
   # rails generate migration add_ids_to_accounts ids:string
