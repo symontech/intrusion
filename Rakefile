@@ -2,7 +2,7 @@ require 'rubygems'
 require 'rake'  
 require 'echoe'  
   
-Echoe.new('intrusion', '0.1.0') do |p|  
+Echoe.new('intrusion', '0.1.1') do |p|  
   p.description     = "intrusion detection and prevention for rails apps"
   p.url             = "http://github.com/symontech/intrusion"  
   p.author          = "Simon Wepfer"  
