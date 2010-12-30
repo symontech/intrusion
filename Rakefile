@@ -3,7 +3,7 @@ require 'rake'
 require 'echoe'  
   
 Echoe.new('intrusion', '0.1.0') do |p|  
-  p.description     = "intrusion detection for rails apps"
+  p.description     = "intrusion detection and prevention for rails apps"
   p.url             = "http://github.com/symontech/intrusion"  
   p.author          = "Simon Wepfer"  
   p.email           = "sw@netsense.ch"  
