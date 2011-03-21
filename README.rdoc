@@ -14,7 +14,7 @@ Rails 2: include the gem in config/environment.rb
   
 create a 'ids' attribute for the ActiveRecord model you want to protect and migrate, e.g:
 
-  # rails generate migration add_ids_to_accounts ids:string
+  # rails generate migration add_ids_to_accounts ids:text
   # rake db:migrate
 
 include Intrusion in your model:
@@ -47,9 +47,6 @@ You are not limited to IP adresses. You may block the object itself using any ke
   Account.find(1).ids_report!('self')
 
 
-== Hint
-Try http://spectify.com to scan your servers and applications for vulnerabilities - for free!
-
 == Copyright
 
-(c) 2010 -2011 netsense LLC - managed security audits - http://netsense.ch
+(c) 2011 netsense managed security audits - http://netsense.ch
