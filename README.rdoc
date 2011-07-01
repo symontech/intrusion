@@ -1,6 +1,9 @@
 = Intrusion
 
-Intrusion is a gem helping you to detect and prevent intrusion attempts within your ruby on rails application.
+Intrusion is a gem helping you to block objects for IP adresses within your Ruby on Rails Application.
+
+For more features like black- and whitelisting, redirection, XSS and SQL injection detection,
+please check out our web application firewall coming with a ready-to-use web front-end: http://detrusion.com
 
 == Installation
 Install the gem:
@@ -25,7 +28,7 @@ include Intrusion in your model:
 
 == Examples:
 
-=== Check if IP adress is blocked
+=== Check if IP address is blocked
   return "your ip is blocked" if Account.find(1).ids_is_blocked?(request.remote_addr)
 
 
