@@ -3,7 +3,7 @@
 Intrusion is a gem helping you to block objects for IP adresses within your Ruby on Rails Application.
 
 For more features like black- and whitelisting, redirection, XSS and SQL injection detection,
-please check out our web application firewall coming with a ready-to-use web front-end: http://detrusion.com
+please check out our web application firewall coming with a ready-to-use web front-end: https://github.com/symontech/detrusion
 
 == Installation
 Install the gem:
