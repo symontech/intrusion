@@ -63,9 +63,7 @@ class IntrusionTest < ActiveSupport::TestCase #< Test::Unit::TestCase
     
     test "reload" do
       assert(@record.ids_report!(@object, true))
-      
-      @record = Record.last
-      assert_equal(10, @record.ids_counter(@object))
+      assert_equal(10, Record.last.ids_counter(@object))
     end
         
  end
