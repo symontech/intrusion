@@ -5,7 +5,12 @@ module Intrusion
     ids_load.each { |d| return true if d[:ip] == ip and d[:counter] > 9 }
     return false
   end
-    
+  
+  def ids_counter(ip)
+    ids_load.each { |d| return d[:counter] if d[:ip] == ip }
+    return 0
+  end
+      
   # report suspicious activity
   def ids_report!(ip, block=false)
     dt = ids_load
@@ -14,7 +19,8 @@ module Intrusion
     if found
 	    block ? found[:counter] = 10 : found[:counter] += 1
     else
-	    dt << { :ip => ip, :counter => 1 }
+      initial_counter = block ? 10 : 1
+	    dt << { :ip => ip, :counter => initial_counter }
 	  end
 	
     # update
