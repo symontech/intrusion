@@ -14,18 +14,16 @@ module Intrusion
   # report suspicious activity
   def ids_report!(ip, block=false)
     dt = ids_load
-    found = false
+    found = nil
     dt.each { |d| found = d if d[:ip] == ip }
     if found
 	    block ? found[:counter] = 10 : found[:counter] += 1
     else
-      initial_counter = block ? 10 : 1
-	    dt << { :ip => ip, :counter => initial_counter }
+	    dt << { ip: ip, counter: block ? 10 : 1 }
 	  end
 	
-    # update
-    self.ids = dt.to_yaml
-    return self.save
+    # update record
+    return self.update_attributes(ids: dt.to_yaml)
   end
 
   # reset counter and stay
@@ -35,19 +33,19 @@ module Intrusion
     dt.each { |d| found = d if d[:ip] == ip }
     
     if found
-      dt.delete found 
+      dt.delete(found) 
     
       # update
-	    self.ids = dt.to_yaml
-	    return self.save
+      return self.update_attributes(ids: dt.to_yaml)
+
     end
     return false
   end
 
   # convert yaml string helper
   def ids_load
-    dt = []
-    dt = YAML::load(ids) if ids
+    dt = ids.blank? ? [] : YAML::load(ids) rescue []
+    dt = [] unless dt.class == Array
     return dt
   end
 
