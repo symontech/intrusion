@@ -9,12 +9,9 @@ please check out our rails web application firewall coming with a ready-to-use w
 Install the gem:
   gem install intrusion
 
-Rails 3: include intrusion in your Gemfile
+Rails: include intrusion in your Gemfile
   gem 'intrusion'
 
-Rails 2: include the gem in config/environment.rb
-  config.gem "intrusion" 
-  
 create a 'ids' attribute for the ActiveRecord model you want to protect and migrate, e.g:
 
   # rails generate migration add_ids_to_accounts ids:text
@@ -46,10 +43,13 @@ This resets the counter to 0:
 
 
 === Blocking objects with keywords
-You are not limited to IP adresses. You may block the object itself using any keyword:
+You are not limited to IP addresses. You may block the object itself using any keyword:
   Account.find(1).ids_report!('self')
+
+=== Run tests
+  bundle exec ruby -Itest test/intrusion_test.rb
 
 
 == Copyright
 
-(c) 2011 netsense managed security audits - http://netsense.ch
+(c) 2018 netsense GmbH - https://netsense.ch/
