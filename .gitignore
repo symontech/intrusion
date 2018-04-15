@@ -1,2 +1,4 @@
 pkg
 doc
+intrusion-*.gem
+.byebug_history
