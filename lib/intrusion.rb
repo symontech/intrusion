@@ -45,8 +45,10 @@ module Intrusion
 
   # convert yaml string helper
   def ids_load
-    dt = ids.blank? ? [] : YAML.load(ids, Intrusion) rescue []
-    dt = [] unless dt.class == Array
-    dt
+    data = ids.blank? ? [] : YAML.safe_load(ids, [Symbol])
+    raise 'invalid data in ids field' unless data.is_a?(Array)
+    data
+  rescue RuntimeError
+    []
   end
 end

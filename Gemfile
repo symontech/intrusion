@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'activerecord'
-gem 'echoe'
+gem 'byebug'
 gem 'minitest'
 gem 'sqlite3'
