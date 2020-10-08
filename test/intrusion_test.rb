@@ -71,7 +71,7 @@ class IntrusionTest < ActiveSupport::TestCase
   end
 
   test 'load should rescue to array' do
-    assert @record.update_attributes(ids: 'strange content')
+    assert @record.update(ids: 'strange content')
     assert_equal Array, @record.ids_load.class
     assert_equal false, @record.ids_load.any?
   end

@@ -26,7 +26,7 @@ module Intrusion
     end
 
     # update record
-    update_attributes(ids: dt.to_yaml)
+    update(ids: dt.to_yaml)
   end
 
   # reset counter and stay
@@ -38,7 +38,7 @@ module Intrusion
     if found
       dt.delete(found)
       # update
-      return update_attributes(ids: dt.to_yaml)
+      return update(ids: dt.to_yaml)
     end
     false
   end

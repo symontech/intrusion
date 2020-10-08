@@ -49,4 +49,4 @@ You are not limited to IP addresses. You may block the object itself using any k
 
 == Copyright
 
-(c) 2018 netsense GmbH - https://netsense.ch/
+(c) 2020 netsense GmbH - https://netsense.ch/
