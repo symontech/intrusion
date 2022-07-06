@@ -24,23 +24,13 @@ class IntrusionTest < ActiveSupport::TestCase
   def setup
     @record = Record.new
     @object = 'some ip'
-    @tmpfile = 'test.tmp.yml'
   end
 
   def teardown
     Intrusion.reset
-    File.delete(@tmpfile) if File.exist?(@tmpfile)
   end
 
   test 'new record should return empty array on load' do
-    assert_equal '', Intrusion.config.file
-    assert_equal Array, @record.ids_load.class
-
-    # test file mode with nonexisting file
-    assert_equal false, File.exist?(@tmpfile)
-    Intrusion.configure do |config|
-      config.file = @tmpfile
-    end
     assert_equal Array, @record.ids_load.class
   end
 
@@ -48,7 +38,10 @@ class IntrusionTest < ActiveSupport::TestCase
     assert @record.ids_report!(@object)
     assert_equal false, @record.ids_is_blocked?(@object)
 
-    8.times.each { assert(@record.ids_report!(@object)) }
+    (2..9).each do |nr|
+      assert(@record.ids_report!(@object))
+      assert_equal nr, @record.ids_counter(@object)
+    end
     assert_equal false, @record.ids_is_blocked?(@object)
 
     # 10th time should block
@@ -110,14 +103,9 @@ class IntrusionTest < ActiveSupport::TestCase
 
   test 'configure block' do
     Intrusion.configure do |config|
-      config.file = @tmpfile
       config.threshold = 2
     end
-
-    assert_equal @tmpfile, Intrusion.config.file
     assert_equal 2, Intrusion.config.threshold
-
-    assert_equal @tmpfile, Intrusion.config[:file]
     assert_equal 2, Intrusion.config[:threshold]
   end
 
@@ -137,48 +125,6 @@ class IntrusionTest < ActiveSupport::TestCase
 
   test 'default config values' do
     assert_equal 10, Intrusion.config.threshold
-    assert_equal '', Intrusion.config.file
-  end
-
-  test 'partial configure' do
-    threshold = rand(1..100)
-    Intrusion.configure do |config|
-      config.threshold = threshold
-    end
-
-    assert_equal threshold, Intrusion.config.threshold
-    assert_equal '', Intrusion.config.file
-  end
-
-  test 'file mode write and read' do
-    threshold = 5
-    Intrusion.configure do |config|
-      config.file = @tmpfile
-      config.threshold = threshold
-    end
-    assert_equal 0, @record.ids_counter(@object)
-    assert @record.ids_report!(@object, true)
-    assert_equal threshold, @record.ids_counter(@object)
-  end
-
-  test 'file mode without a model' do
-    class MyGlobalIDS
-      include Intrusion
-      Intrusion.configure do |config|
-        config.file = 'test.tmp.yml'
-        config.threshold = 6
-      end
-    end
-
-    global = MyGlobalIDS.new
-
-    
-    assert_equal 0,  global.ids_counter(@object)
-
-    assert global.ids_report!(@object, true)
-    global = MyGlobalIDS.new
-
-    assert_equal 6, global.ids_counter(@object)
   end
 
 end

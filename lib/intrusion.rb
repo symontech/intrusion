@@ -2,11 +2,9 @@
 
 module Intrusion
 
-  DefaultConfig = Struct.new(:file, :threshold, :mutex) do
+  DefaultConfig = Struct.new(:threshold) do
     def initialize
-      self.file = ''
       self.threshold = 10
-      self.mutex = Mutex.new
     end
   end
 
@@ -22,6 +20,7 @@ module Intrusion
 
   def self.reset
     @config = nil
+    @cache = nil
   end
 
   # check if ip is blocked
@@ -66,34 +65,16 @@ module Intrusion
 
   # convert yaml string helper
   def ids_load
-    if Intrusion.config.file.blank?
-      begin
-        data = ids.blank? ? [] : YAML.safe_load(ids, [Symbol])
-        raise 'invalid data in ids field' unless data.is_a?(Array)
-        data
-      rescue RuntimeError
-        []
-      end
-    else
-      begin
-        Intrusion.config.mutex.synchronize {
-          file_contents = File.read(Intrusion.config.file)
-          YAML.safe_load(file_contents, [Symbol])
-        }
-      rescue Errno::ENOENT # file does not exist
-        []
-      end
-    end
+    data = ids.blank? ? [] : YAML.safe_load(ids, [Symbol])
+    raise 'invalid data in ids field' unless data.is_a?(Array)
+    data
+  rescue RuntimeError
+    []
   end
-
+  
   # save current state to object or file
   def ids_save!(dt)
-    if Intrusion.config.file.blank?
-      update(ids: dt.to_yaml)
-    else
-      Intrusion.config.mutex.synchronize {
-        File.open(Intrusion.config.file, "w") { |f| f.write dt.to_yaml }
-      }
-    end
+    update(ids: dt.to_yaml)
   end
+
 end
