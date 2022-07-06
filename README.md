@@ -5,13 +5,17 @@ Intrusion is a gem helping you to block objects for IP adresses within your Rail
 ## Installation
 As usual:
 ```
-gem install intrusion
+# gem install intrusion
 ```
-or add it to your Gemfile:
+or add it to your `Gemfile`:
 ```
-gem 'intrusion'
+gem 'intrusion', '>= 0.2.0'
+```
+then run
+```
+# bundle install
+```
 
-```
 ## Setup
 
 ### Option A: Database
@@ -54,13 +58,23 @@ It might be a good idea to raise a `SecurityError` whenever something's happenin
 Then catch and re-raise in the `application_controller.rb`, for example:
 ```
 class ApplicationController < ActionController::Base
-
+  
+  before_action :allowed_by_ids
+  
   rescue_from SecurityError, with: :hit_ids
-    
+  
+  protected
+
   def hit_ids(exception)
     MyGlobalIDS.new.ids_report!(request.remote_ip)
     raise exception
   end
+
+  def allowed_by_ids
+    head :unauthorized if MyGlobalIDS.new.ids_is_blocked?(request.remote_ip)
+  end
+
+
   [...]
 end
 ```
