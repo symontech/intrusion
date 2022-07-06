@@ -3,11 +3,7 @@
 Intrusion is a gem helping you to block objects for IP adresses within your Rails Application.
 
 ## Installation
-As usual:
-```
-# gem install intrusion
-```
-or add it to your `Gemfile`:
+add it to your `Gemfile`:
 ```
 gem 'intrusion'
 ```
