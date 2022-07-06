@@ -1,9 +1,33 @@
 # Intrusion main module
+
 module Intrusion
+
+  DefaultConfig = Struct.new(:file, :threshold, :mutex) do
+    def initialize
+      self.file = ''
+      self.threshold = 10
+      self.mutex = Mutex.new
+    end
+  end
+
+  def self.configure
+    @config = DefaultConfig.new
+    yield(@config) if block_given?
+    @config
+  end
+
+  def self.config
+    @config || configure
+  end
+
+  def self.reset
+    @config = nil
+  end
+
   # check if ip is blocked
   def ids_is_blocked?(address)
     ids_load.each do |d|
-      return true if d[:ip] == address && d[:counter] > 9
+      return true if d[:ip] == address && d[:counter] >= Intrusion.config.threshold
     end
     false
   end
@@ -20,13 +44,11 @@ module Intrusion
     found = nil
     dt.each { |d| found = d if d[:ip] == address }
     if found
-      block ? found[:counter] = 10 : found[:counter] += 1
+      block ? found[:counter] = Intrusion.config.threshold : found[:counter] += 1
     else
-      dt << { ip: address, counter: block ? 10 : 1 }
+      dt << { ip: address, counter: block ? Intrusion.config.threshold : 1 }
     end
-
-    # update record
-    update(ids: dt.to_yaml)
+    ids_save!(dt)
   end
 
   # reset counter and stay
@@ -37,18 +59,41 @@ module Intrusion
 
     if found
       dt.delete(found)
-      # update
-      return update(ids: dt.to_yaml)
+      return ids_save!(dt)
     end
     false
   end
 
   # convert yaml string helper
   def ids_load
-    data = ids.blank? ? [] : YAML.safe_load(ids, [Symbol])
-    raise 'invalid data in ids field' unless data.is_a?(Array)
-    data
-  rescue RuntimeError
-    []
+    if Intrusion.config.file.blank?
+      begin
+        data = ids.blank? ? [] : YAML.safe_load(ids, [Symbol])
+        raise 'invalid data in ids field' unless data.is_a?(Array)
+        data
+      rescue RuntimeError
+        []
+      end
+    else
+      begin
+        Intrusion.config.mutex.synchronize {
+          file_contents = File.read(Intrusion.config.file)
+          YAML.safe_load(file_contents, [Symbol])
+        }
+      rescue Errno::ENOENT # file does not exist
+        []
+      end
+    end
+  end
+
+  # save current state to object or file
+  def ids_save!(dt)
+    if Intrusion.config.file.blank?
+      update(ids: dt.to_yaml)
+    else
+      Intrusion.config.mutex.synchronize {
+        File.open(Intrusion.config.file, "w") { |f| f.write dt.to_yaml }
+      }
+    end
   end
 end
