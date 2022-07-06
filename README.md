@@ -9,7 +9,7 @@ As usual:
 ```
 or add it to your `Gemfile`:
 ```
-gem 'intrusion', '>= 0.2.0'
+gem 'intrusion'
 ```
 then run
 ```
