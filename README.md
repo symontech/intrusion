@@ -3,7 +3,7 @@
 Intrusion is a gem helping you to block objects for IP adresses within your Rails Application.
 
 ## Installation
-add it to your `Gemfile`:
+Add it to your `Gemfile`:
 ```
 gem 'intrusion'
 ```
@@ -61,8 +61,6 @@ class ApplicationController < ActionController::Base
     head :unauthorized if @account.ids_is_blocked?(request.remote_ip)
   end
 
-
-  [...]
 end
 ```
 
