@@ -21,7 +21,14 @@ create an `ids` text attribute for the ApplicationRecord you want to protect and
 # rails generate migration add_ids_to_accounts ids:text
 # rails db:migrate
 ```
-#### Include in the model:
+
+If you need a global IDS on application-level, migrate an existing ApplicationRecord or create a new one, example:
+```
+# rails g model global ids:text
+# rails db:migrate
+```
+
+### Include in  model
 ```
 class Account < ApplicationRecord
     include Intrusion
@@ -39,8 +46,9 @@ class Account < ApplicationRecord
 end
 ```
 
+
 ## Implementing in the Application Controller
-It might be a good idea to raise a `SecurityError` whenever something's happening that looks like an attack.
+It might be a good idea to `raise SecurityError` whenever something's happening that looks like an attack.
 
 Then catch and re-raise in the `application_controller.rb`, for example:
 ```
@@ -68,19 +76,21 @@ end
 
 ### Check if IP address is blocked
 ```
-> return 'your ip is blocked' if @account.ids_is_blocked?(request.remote_addr)
+> @account.ids_is_blocked?(request.remote_addr)
 ```
 
 ### Report suspicious activity
-The internal counter will be increased. If you do this 10 times, the ip is considered blocked
+The internal counter will be increased. If you do this 10 times, the ip is considered blocked. Modify this threshold in the configure block (see above).
 ```
 > @account.ids_report!(request.remote_addr)
 ```
 ### Immediate block
+If something really bad happend, you can bock immediately:
 ```
 > @account.ids_report!(request.remote_addr, true)
 ```
-### Reset counter
+### Reset
+For instance, after a successful login, you could reset the counter:
 ```
 > @account.ids_unblock!(request.remote_addr)
 ```
@@ -94,7 +104,9 @@ You are not limited to IP addresses. You may use any keyword, for instance:
 ```
 # ruby -Itest test/intrusion_test.rb
 ```
+## License
+MIT
 
 ## Copyright
 
-(c) 2010 - 2022 Simon Duncombe
+© 2010 - 2022 Simon Duncombe
